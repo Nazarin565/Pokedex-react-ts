@@ -5,7 +5,7 @@ import { colorsForTypes } from "./assets/constants.ts";
 import { AppContext } from "./store/AppProvider.tsx";
 
 export const App = () => {
-  const { pokemons, selectedPokemon, handleLoadMorePokemons } =
+  const { pokemons, selectedPokemon, handleLoadMorePokemons, loading } =
     useContext(AppContext);
 
   const [filterValue, setFilterValue] = useState<string>("");
@@ -23,12 +23,12 @@ export const App = () => {
       </h1>
 
       <div className="flex gap-4">
-        <div className="w-1/2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 mb-4">
+        <div className="w-1/2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 mb-4 grid-row">
           <select
             id="filter"
             defaultValue=""
             onChange={(e) => setFilterValue(e.target.value)}
-            className="col-span-full w-1/2 bg-gray-500 rounded-md p-1 text-white font-bold"
+            className="col-span-full w-1/2 bg-gray-500 rounded-md p-1 text-white font-bold h-7"
           >
             <option value="">All</option>
             {Object.keys(colorsForTypes).map((type, index) => (
@@ -44,10 +44,11 @@ export const App = () => {
 
           <button
             type="button"
-            className="text-2xl text-white font-bold py-2 bg-blue-400 col-span-full w-5/6 justify-self-center rounded-lg"
+            className="text-2xl text-white font-bold py-2 bg-blue-400 disabled:bg-blue-200 col-span-full w-5/6 h-12 justify-self-center rounded-lg"
             onClick={handleLoadMorePokemons}
+            disabled={loading}
           >
-            Load more
+            {loading ? "Loading..." : "Load more"}
           </button>
         </div>
 

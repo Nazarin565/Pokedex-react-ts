@@ -13,6 +13,7 @@ type AppType = {
   selectedPokemon: Pokemon | null;
   handleLoadMorePokemons: () => void;
   handleSelectPokemon: (pokemon: Pokemon) => void;
+  loading: boolean;
 };
 
 export const AppContext = createContext<AppType>({
@@ -20,6 +21,7 @@ export const AppContext = createContext<AppType>({
   selectedPokemon: null,
   handleLoadMorePokemons: () => {},
   handleSelectPokemon: () => {},
+  loading: false,
 });
 
 type Props = {
@@ -31,12 +33,14 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
   const [nextLink, setNextLink] = useState("");
 
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchPokemons = useCallback((maxId: number = 0, link?: string) => {
+    setLoading(true);
     getListOfPokemons(link && link).then((data) => {
       data.results.forEach((item: Pokemon, index: number) => {
-        getDetailsAboutPokemon(maxId + index + 1).then(
-          (details: FullPokemonData) => {
+        getDetailsAboutPokemon(maxId + index + 1)
+          .then((details: FullPokemonData) => {
             // **FOR THIS APP WE DON'T NEED TO USE THE ENTIRE OBJECT, SO WE DON'T SAVE THE WHOLE OBJECT IN THE STATE
             const updatedPokemon = {
               ...item,
@@ -49,8 +53,8 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
             };
 
             setPokemons((prev) => [...prev, updatedPokemon]);
-          }
-        );
+          })
+          .finally(() => setLoading(false));
       });
 
       setNextLink(data.next);
@@ -82,6 +86,7 @@ export const AppProvider: React.FC<Props> = ({ children }) => {
         selectedPokemon,
         handleLoadMorePokemons,
         handleSelectPokemon,
+        loading,
       }}
     >
       {children}
