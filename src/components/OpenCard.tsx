@@ -1,71 +1,49 @@
 import React from "react";
+import { Pokemon } from "../types/Pokemons";
 
-export const OpenCard = () => {
+type Props = {
+  selectedPokemon: Pokemon;
+};
+
+export const OpenCard: React.FC<Props> = ({ selectedPokemon }) => {
   return (
-    <div className="border border-black p-2 flex flex-col gap-2 items-center">
-      <img src="/favicon.ico" alt="pokemon" className="" />
+    <div className="border border-black p-3 flex flex-col gap-2 items-center h-fit sticky top-1">
+      <img
+        src={selectedPokemon.img}
+        alt={selectedPokemon.name}
+        className="w-96 object-cover bg-slate-100"
+      />
 
-      <h3 className="text-2xl">Charmander #004</h3>
+      <h3 className="text-2xl capitalize">{selectedPokemon.name}</h3>
 
       <table className="w-full text-center border-collapse">
-        <tr>
-          <th className="border border-black">Type</th>
-          <th className="border border-black">Fire</th>
-        </tr>
-        <tr>
-          <td className="border border-black">Attack</td>
-          <td className="border border-black">52</td>
-        </tr>
-        <tr>
-          <td className="border border-black">Defense</td>
-          <td className="border border-black">43</td>
-        </tr>
-        <tr>
-          <td className="border border-black">HP</td>
-          <td className="border border-black">39</td>
-        </tr>
-        <tr>
-          <td className="border border-black">SP Attack</td>
-          <td className="border border-black">60</td>
-        </tr>
-        <tr>
-          <td className="border border-black">SP Defense</td>
-          <td className="border border-black">50</td>
-        </tr>
-        <tr>
-          <td className="border border-black">Speed</td>
-          <td className="border border-black">65</td>
-        </tr>
-        <tr>
-          <td className="border border-black">Weight</td>
-          <td className="border border-black">85</td>
-        </tr>
-        <tr>
-          <td className="border border-black">Total moves</td>
-          <td className="border border-black">89</td>
-        </tr>
+        <thead>
+          <tr>
+            <th className="border border-black">Type</th>
+            <th className="border border-black">Fire</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedPokemon.stats.map((item, index) => (
+            <tr key={index}>
+              <td className="border border-black capitalize">
+                {item.stat.name}
+              </td>
+              <td className="border border-black">{item.base_stat}</td>
+            </tr>
+          ))}
+          <tr>
+            <td className="border border-black">Weight</td>
+            <td className="border border-black">{selectedPokemon.weight}</td>
+          </tr>
+          <tr>
+            <td className="border border-black">Total moves</td>
+            <td className="border border-black">
+              {selectedPokemon.movesLength}
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
 };
-
-/* <div className="border border-black p-2 flex flex-col flex-shrink-0 gap-1 items-center">
-      <img
-        src="/favicon.ico"
-        alt="pokemon"
-        className="w-32 h-32 object-contain bg-gray-400"
-      />
-
-      <h4 className="text-xl font-semibold">Bulbazar</h4>
-
-      <div className="list-of-skills flex flex-wrap gap-1">
-        <div className="text-sm border rounded-md p-px bg-green-400">Grass</div>
-        <div className="text-sm border rounded-md p-px bg-purple-400">
-          Poison
-        </div>
-        <div className="text-sm border rounded-md p-px bg-green-400">Grass</div>
-        <div className="text-sm border rounded-md p-px bg-purple-400">
-          Poison
-        </div>
-      </div>
-    </div> */
